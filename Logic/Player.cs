@@ -1,6 +1,7 @@
 
 using System.Reflection;
 using System.Threading.Channels;
+using Microsoft.VisualBasic;
 
 namespace Snake.Logic;
 
@@ -161,21 +162,27 @@ public class Player
 
     public void ChangeDirection(ConsoleKeyInfo keyInfo)
     {
+        Direction newDirection = GetDirection(keyInfo);
+        if (newDirection == GetOpposingDirection(Head.HeadDirection))
+            return;
+        Head.ChangeDirection(newDirection);
+    }
+
+    private Direction GetDirection(ConsoleKeyInfo keyInfo)
+    {
         switch (keyInfo.Key)
         {
             case ConsoleKey.W:
-                Head.ChangeDirection(Direction.North);
-                break;
+                return Direction.North;
             case ConsoleKey.A:
-                Head.ChangeDirection(Direction.West);
-                break;
+                return Direction.West;
             case ConsoleKey.S:
-                Head.ChangeDirection(Direction.South);
-                break;
+                return Direction.South;
             case ConsoleKey.D:
-                Head.ChangeDirection(Direction.East);
-                break;
-        }        
+                return Direction.East;
+            default:
+                return Direction.North;
+        }
     }
 
     public Player(HeadCell head, Map Map)
